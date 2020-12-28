@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.CollectionReference;
+import com.google.cloud.firestore.DocumentReference;
+import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
@@ -47,7 +49,7 @@ public class ClientService {
 				
 		double sd = Math.sqrt(var);
 		
-		return new Kpi( avg, sd);
+		return new Kpi( formatearDecimales(avg,2), formatearDecimales(sd,2));
 	}
 	
 	public List<Client> getListClient() throws InterruptedException, ExecutionException {
@@ -58,10 +60,33 @@ public class ClientService {
 		List<QueryDocumentSnapshot> documents = querySnapshot.getDocuments();
 				
 		List<Client> clients = documents.stream()
-	       .map(f -> new Client(f.getString("name"),f.getString("lastname"),f.getLong("age"),f.getString("birthday"),f.getString("birthday")))
+	       .map(f -> new Client(f.getId(),f.getString("name"),f.getString("lastname"),f.getLong("age"),f.getString("birthday"),f.getString("birthday")))
 	       .collect(Collectors.toList());
 	       
 		return clients;
 		
+	}
+	
+	public Client getClient(String id) throws InterruptedException, ExecutionException {
+		
+		Client client = null;
+		DocumentReference docRef = getClientTable().document(id);
+		ApiFuture<DocumentSnapshot> future = docRef.get();
+
+		
+		DocumentSnapshot f = future.get();
+		if (f.exists()) {
+			
+			client = new Client(f.getId(),f.getString("name"),f.getString("lastname"),f.getLong("age"),f.getString("birthday"),f.getString("birthday"));
+
+		} 
+	       
+		return client;
+		
+	}
+	
+	
+	private Double formatearDecimales(Double numero, Integer numeroDecimales) {
+		return Math.round(numero * Math.pow(10, numeroDecimales)) / Math.pow(10, numeroDecimales);
 	}
 }

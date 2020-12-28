@@ -9,6 +9,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Client {
 
+	private String id;
 	private String name;
 	private String lastname;
 	private Long age;

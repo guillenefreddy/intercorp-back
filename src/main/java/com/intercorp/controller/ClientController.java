@@ -6,6 +6,7 @@ import java.util.concurrent.ExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +32,18 @@ public class ClientController {
 	public String createClient(@RequestBody Client client) throws InterruptedException, ExecutionException {
 		return clientService.saveClient(client);
 	}
+
+	@GetMapping("/listclientes")
+	@ApiOperation(value = "Lista de clientes", notes = "Retorna la lista de todos los clientes")
+	public List<Client> listClient() throws InterruptedException, ExecutionException {
+		return clientService.getListClient();
+	}
+	
+	@GetMapping("/obtenercliente/{clientId}")
+	@ApiOperation(value = "Obtiene cliente", notes = "Retorna datos de cliente")
+	public Client getClient(@PathVariable("clientId") String clientId) throws InterruptedException, ExecutionException {
+		return clientService.getClient(clientId);
+	}
 	
 	@GetMapping("/kpideclientes")
 	@ApiOperation(value = "Kpi de clientes", notes = "Retorna indicadores de las edades de los clientes")
@@ -38,9 +51,5 @@ public class ClientController {
 		return clientService.getKpi();
 	}
 	
-	@GetMapping("/listclientes")
-	@ApiOperation(value = "Lista de clientes", notes = "Retorna la lista de todos los clientes")
-	public List<Client> listClient() throws InterruptedException, ExecutionException {
-		return clientService.getListClient();
-	}
+
 }
