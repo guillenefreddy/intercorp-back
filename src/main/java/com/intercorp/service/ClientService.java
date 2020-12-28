@@ -45,7 +45,7 @@ public class ClientService {
 		
 		double avg = documents.stream().map(f -> f.getLong("age")).mapToDouble(Long::doubleValue).average().orElse(0.0);
 			
-		double var = 0.0;
+		double var = 1.0;
 				
 		double sd = Math.sqrt(var);
 		
