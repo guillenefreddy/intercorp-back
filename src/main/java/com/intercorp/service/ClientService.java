@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.api.core.ApiFuture;
@@ -15,21 +14,23 @@ import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
 import com.google.cloud.firestore.WriteResult;
+import com.google.firebase.cloud.FirestoreClient;
 import com.intercorp.entity.Client;
 import com.intercorp.entity.Kpi;
 
 @Service
 public class ClientService {
 
-	@Autowired
-	private Firestore firestore;
 	
 	private CollectionReference getClientTable(){
 	
-		return firestore.collection("client");
+		Firestore dbFirestore = FirestoreClient.getFirestore();  
+		 
+		return dbFirestore.collection("client");
 	}
 	
 	public String saveClient(Client client) throws InterruptedException, ExecutionException {
+		
 		
 		ApiFuture<WriteResult> aFuture = getClientTable().document().set(client);
 				
@@ -45,7 +46,7 @@ public class ClientService {
 		
 		double avg = documents.stream().map(f -> f.getLong("age")).mapToDouble(Long::doubleValue).average().orElse(0.0);
 			
-		double var = 0.0;
+		double var = 1.0;
 				
 		double sd = Math.sqrt(var);
 		
