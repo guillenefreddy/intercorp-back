@@ -11,6 +11,6 @@ WORKDIR /usr/src/app/intercorp-back
 # Install app dependencies
 COPY target/intercorp-back-*.jar /usr/src/app/intercorp-back/app.jar
 
-EXPOSE 8080
+EXPOSE 8000
 
 CMD exec java -Duser.timezone=America/Lima -XX:+PrintFlagsFinal $JAVA_OPTIONS -jar app.jar
