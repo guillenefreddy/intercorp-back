@@ -3,18 +3,14 @@ FROM openjdk:8
 ARG artifact_id
 ARG artifact_version
 
-ENV artifact ${artifact_id}-${artifact_version}.jar
-
-
 # Create app directory
-RUN mkdir -p /usr/src/app/${artifact_id}/logs
+RUN mkdir -p /usr/src/app/intercorp-back/logs
 RUN mkdir -p /data
-WORKDIR /usr/src/app/${artifact_id}
-
+WORKDIR /usr/src/app/intercorp-back
 
 # Install app dependencies
-COPY target/${artifact} /usr/src/app/${artifact_id}/${artifact}
+COPY target/intercorp-back-*.jar /usr/src/app/intercorp-back/app.jar
 
 EXPOSE 8080
 
-CMD exec java -Duser.timezone=America/Lima -XX:+PrintFlagsFinal $JAVA_OPTIONS -jar ${artifact}
+CMD exec java -Duser.timezone=America/Lima -XX:+PrintFlagsFinal $JAVA_OPTIONS -jar app.jar
